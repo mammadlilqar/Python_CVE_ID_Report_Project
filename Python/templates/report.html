@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVE Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style for report.css') }}">
+     <link rel="icon" href="https://ppcl.com/wp-content/uploads/2022/01/PPCL_Icons_CVE_600_Tiny.png">
+</head>
+<body>
+    <div class="report-container">
+        <h1>CVE Report</h1>
+        <!-- Report content -->
+        <pre>{{ report }}</pre>
+        <a href="/">Go back</a>
+    </div>
+</body>
+</html>

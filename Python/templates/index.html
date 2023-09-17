@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CVE Lookup</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style for index.css') }}"
+    />
+    <link
+      rel="icon"
+      href="https://ppcl.com/wp-content/uploads/2022/01/PPCL_Icons_CVE_600_Tiny.png"
+    />
+  </head>
+  <body>
+    <div class="form-container">
+      <h1>CVE Lookup</h1>
+
+      <!-- Form for entering CVE ID -->
+      <form method="POST" class="field" onsubmit="return validateCVEID()">
+        <input
+          type="text"
+          name="cve_id"
+          id="cve_id_input"
+          placeholder="Enter CVE ID"
+          required
+        />
+        <button type="submit">Get report</button>
+      </form>
+
+      <!-- Error message div -->
+      <div id="error_message" class="error-message" style="display: none">
+        Invalid CVE ID format. CVE ID must follow the format CVE-YYYY-NNNN,
+        CVE-YYYY-NNNNN, or CVE-YYYY-NNNNNN (not case-sensitive). Please follow
+        the rules!!!
+      </div>
+    </div>
+
+    <script>
+      function validateCVEID() {
+        // Get the input value and remove spaces
+        var cve_id = document
+          .getElementById("cve_id_input")
+          .value.replace(/\s/g, "");
+
+        // Use regular expression to validate the CVE ID format
+        var cve_pattern = /^CVE-\d{4}-\d{4,6}$/i;
+
+        if (!cve_pattern.test(cve_id)) {
+          // Display the error message
+          document.getElementById("error_message").style.display = "block";
+          return false; // Prevent form submission
+        }
+        return true; // Allow form submission
+      }
+    </script>
+  </body>
+</html>
