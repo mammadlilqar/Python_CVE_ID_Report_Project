@@ -49,7 +49,7 @@
           .value.replace(/\s/g, "");
 
         // Use regular expression to validate the CVE ID format
-        var cve_pattern = /^CVE-\d{4}-\d{4,6}$/i;
+        var cve_pattern = /^CVE-\d{4}-\d{4,7}$/i;
 
         if (!cve_pattern.test(cve_id)) {
           // Display the error message

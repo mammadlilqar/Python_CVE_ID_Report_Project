@@ -10,7 +10,7 @@ def fetch_cve_info(cve_id):
     cve_id = cve_id.upper()  # Convert to uppercase for consistency
 
     # Validate the CVE ID format
-    if not re.match(r'^CVE-\d{4}-\d{4,6}$', cve_id):
+    if not re.match(r'^CVE-\d{4}-\d{4,7}$', cve_id):
         return None, None, None, None  # Return None for MITRE data
 
     nvd_url = f"https://nvd.nist.gov/vuln/detail/{cve_id}"
@@ -53,9 +53,9 @@ def generate_report(cve_id, nvd_description, nvd_severity, mitre_description,mit
 def index():
     if request.method == "POST":
         cve_id = request.form["cve_id"].replace(" ", "")  # Remove spaces
-        
+        cve_id=cve_id.upper()
         # Validate the CVE ID format
-        if not re.match(r'^CVE-\d{4}-\d{4,6}$', cve_id):
+        if not re.match(r'^CVE-\d{4}-\d{4,7}$', cve_id):
             error_message = "Invalid CVE ID format. Please enter a valid CVE ID."
             return render_template("index.html", error_message=error_message)
 
