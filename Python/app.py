@@ -14,15 +14,17 @@ def fetch_cve_info(cve_id):
         return None, None, None, None  # Return None for MITRE data
 
     nvd_url = f"https://nvd.nist.gov/vuln/detail/{cve_id}"
-    mitre_url = f"https://cve.mitre.org/cgi-bin/cvename.cgi?name={cve_id}"
+    vulmon_url = f"https://vulmon.com/vulnerabilitydetails?qid={cve_id}"
 
     nvd_response = requests.get(nvd_url)
-    mitre_response = requests.get(mitre_url)
+    vulmon_response = requests.get(vulmon_url)
 
     nvd_description = None
     nvd_severity = None
-    mitre_description = None
-    mitre_severity = None
+    vulmon_description = None
+    vulmon_severity = None
+    vulmon_description = None
+    vulmon_severity = None
     if nvd_response.status_code == 200:
         nvd_soup = BeautifulSoup(nvd_response.content, "html.parser")
         nvd_description_element = nvd_soup.find("p", attrs={"data-testid": "vuln-description"})
@@ -31,22 +33,22 @@ def fetch_cve_info(cve_id):
         nvd_description = nvd_description_element.text.strip() if nvd_description_element else "Description not found on NVD page."
         nvd_severity = nvd_severity_element.text.strip() if nvd_severity_element else "Severity not found on NVD page."
 
-    if mitre_response.status_code == 200:
-        mitre_soup = BeautifulSoup(nvd_response.content, "html.parser")
-        mitre_description_element = mitre_soup.find("p", attrs={"data-testid": "vuln-description"})
-        mitre_severity_element = mitre_soup.find("span", class_="severityDetail")
+    if vulmon_response.status_code == 200:
+        vulmon_soup = BeautifulSoup(vulmon_response.content, "html.parser")
+        vulmon_description_element = vulmon_soup.find("p", attrs={"class": "jsdescription1"})
+        vulmon_severity_element = vulmon_soup.find("div", class_="value")
 
-        mitre_description = mitre_description_element.text.strip() if mitre_description_element else "Description not found on NVD page."
-        mitre_severity = mitre_severity_element.text.strip() if mitre_severity_element else "Severity not found on NVD page."
+        vulmon_description = vulmon_description_element.text.strip() if vulmon_description_element else "Description not found on NVD page."
+        vulmon_severity = vulmon_severity_element.text.strip() if vulmon_severity_element else "Severity not found on NVD page."
+    
+    return nvd_description, nvd_severity, vulmon_description,vulmon_severity
 
-    return nvd_description, nvd_severity, mitre_description,mitre_severity
-
-def generate_report(cve_id, nvd_description, nvd_severity, mitre_description,mitre_severity):
+def generate_report(cve_id, nvd_description, nvd_severity,vulmon_description,vulmon_severity):
     report = f"CVE ID: {cve_id}\n"
     report += f"NVD Description: {nvd_description}\n"
     report += f"NVD Severity: {nvd_severity}\n"
-    report += f"MITRE Description: {mitre_description}\n"
-    report += f"MITRE Severity: {mitre_severity}\n"
+    report += f"Vulmon Description: {vulmon_description}\n"
+    report += f"Vulmon Severity: {vulmon_severity}\n"
     return report
 
 @app.route("/", methods=["GET", "POST"])
@@ -59,10 +61,10 @@ def index():
             error_message = "Invalid CVE ID format. Please enter a valid CVE ID."
             return render_template("index.html", error_message=error_message)
 
-        nvd_description, nvd_severity, mitre_description,mitre_severity = fetch_cve_info(cve_id)
+        nvd_description, nvd_severity, vulmon_description,vulmon_severity = fetch_cve_info(cve_id)
 
         if nvd_description:
-            report = generate_report(cve_id, nvd_description, nvd_severity, mitre_description,mitre_severity)
+            report = generate_report(cve_id, nvd_description, nvd_severity, vulmon_description,vulmon_severity)
             return render_template("report.html", report=report)
 
     return render_template("index.html")
