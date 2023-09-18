@@ -11,7 +11,19 @@ The CVE Lookup web application is a tool that allows users to search for informa
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [Contributing](#contributing)
+Contributions are welcome! If you would like to contribute to this project, please follow these steps:
+
+Fork the repository.
+
+Create a new branch for your feature or bug fix.
+
+Make your changes and commit them.
+
+Push your changes to your forked repository.
+
+Create a pull request to merge your changes into the main branch.
 - [License](#license)
+   This project is licensed under the MIT License - see the LICENSE file for details.
 - [Acknowledgments](#acknowledgments)
 - [Contact](#contact)
 
