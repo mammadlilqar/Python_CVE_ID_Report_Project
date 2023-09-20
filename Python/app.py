@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -23,8 +22,6 @@ def fetch_cve_info(cve_id):
     nvd_severity = None
     vulmon_description = None
     vulmon_severity = None
-    vulmon_description = None
-    vulmon_severity = None
     if nvd_response.status_code == 200:
         nvd_soup = BeautifulSoup(nvd_response.content, "html.parser")
         nvd_description_element = nvd_soup.find("p", attrs={"data-testid": "vuln-description"})
@@ -40,16 +37,20 @@ def fetch_cve_info(cve_id):
 
         vulmon_description = vulmon_description_element.text.strip() if vulmon_description_element else "Description not found on NVD page."
         vulmon_severity = vulmon_severity_element.text.strip() if vulmon_severity_element else "Severity not found on NVD page."
-    
-    return nvd_description, nvd_severity, vulmon_description,vulmon_severity
 
-def generate_report(cve_id, nvd_description, nvd_severity,vulmon_description,vulmon_severity):
+    return nvd_description, nvd_severity, vulmon_description, vulmon_severity
+
+def generate_report(cve_id, nvd_description, nvd_severity):
     report = f"CVE ID: {cve_id}\n"
     report += f"NVD Description: {nvd_description}\n"
     report += f"NVD Severity: {nvd_severity}\n"
-    report += f"Vulmon Description: {vulmon_description}\n"
-    report += f"Vulmon Severity: {vulmon_severity}\n"
     return report
+
+def generate_report2(vulmon_description, vulmon_severity):
+    report2 = ""
+    report2 += f"Vulmon Description: {vulmon_description}\n"
+    report2 += f"Vulmon Severity: {vulmon_severity}\n"
+    return report2
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -62,11 +63,12 @@ def index():
             return render_template("index.html", error_message=error_message)
 
         nvd_description, nvd_severity, vulmon_description,vulmon_severity = fetch_cve_info(cve_id)
-
+       
         if nvd_description:
-            report = generate_report(cve_id, nvd_description, nvd_severity, vulmon_description,vulmon_severity)
-            return render_template("report.html", report=report)
-
+            report = generate_report(cve_id, nvd_description, nvd_severity)
+            report2 = generate_report2(vulmon_description,vulmon_severity)
+            return render_template("report.html", report=report,report2=report2)
+       
     return render_template("index.html")
 
 if __name__ == "__main__":
