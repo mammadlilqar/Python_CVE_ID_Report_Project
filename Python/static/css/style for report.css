@@ -99,4 +99,23 @@ h1 {
 }
 .report1{
   margin-bottom: 22px;
+  font-weight: 600;
+  text-align: left;
+}
+.report2{
+ 
+  font-weight: 600;
+  text-align: left;
+  
+}
+.report3{
+  margin-bottom: 22px;
+  color: red;
+  font-size: 22px;
+  font-weight: 700;
+}
+a{
+  color: white !important;
+  text-decoration: none !important;
+  font-weight: 700;
 }

@@ -40,8 +40,12 @@ def fetch_cve_info(cve_id):
 
     return nvd_description, nvd_severity, vulmon_description, vulmon_severity
 
-def generate_report(cve_id, nvd_description, nvd_severity):
-    report = f"CVE ID: {cve_id}\n"
+def generate_report3(cve_id ):
+    report3 = f"CVE ID: {cve_id}\n"
+     
+    return report3
+def generate_report(nvd_description, nvd_severity):
+    report = ""
     report += f"NVD Description: {nvd_description}\n"
     report += f"NVD Severity: {nvd_severity}\n"
     return report
@@ -65,9 +69,10 @@ def index():
         nvd_description, nvd_severity, vulmon_description,vulmon_severity = fetch_cve_info(cve_id)
        
         if nvd_description:
-            report = generate_report(cve_id, nvd_description, nvd_severity)
+            report = generate_report(nvd_description, nvd_severity)
             report2 = generate_report2(vulmon_description,vulmon_severity)
-            return render_template("report.html", report=report,report2=report2)
+            report3 = generate_report3(cve_id)
+            return render_template("report.html", report=report,report2=report2,report3=report3)
        
     return render_template("index.html")
 
